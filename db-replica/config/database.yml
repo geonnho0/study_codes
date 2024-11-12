@@ -5,13 +5,23 @@
 #   gem "sqlite3"
 #
 default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter: mysql2
+  host: "localhost"
+  username: root
+  password: 123456
+  database: test_db
+  encoding: utf8
+  pool: 5
   timeout: 5000
 
 development:
-  <<: *default
-  database: storage/development.sqlite3
+  primary:
+    port: 33061
+    <<: *default
+  primary_replica:
+    port: 33062
+    replica: true
+    <<: *default
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -28,5 +38,10 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  <<: *default
-  # database: path/to/persistent/storage/production.sqlite3
+  primary:
+    port: 33061
+    <<: *default
+  primary_replica:
+    port: 33062
+    replica: true
+    <<: *default
