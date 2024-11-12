@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  mysql-primary:
+    image: mysql:8.0
+    container_name: mysql-primary
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: test_db
+    ports:
+      - "33061:3306"  # 외부에서 33061 포트로 접근
+    command:
+      - --log-bin=mysql-bin
+      - --server-id=1  # Primary 서버 ID
+      - --binlog-do-db=test_db  # 특정 데이터베이스만 바이너리 로그
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=true
+    networks:
+      - mysql-network
+
+  mysql-replica:
+    image: mysql:8.0
+    container_name: mysql-replica
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: test_db
+    ports:
+      - "33062:3306"  # 외부에서 33062 포트로 접근
+    command:
+      - --server-id=2  # Replica 서버 ID
+      - --read-only=1  # Replica는 읽기 전용
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=true
+    depends_on:
+      - mysql-primary
+    networks:
+      - mysql-network
+    entrypoint: |
+      bash -c "
+        /entrypoint.sh mysqld &
+        sleep 10 && 
+        mysql -uroot -p${MYSQL_ROOT_PASSWORD} -e \"
+          STOP SLAVE;
+          CHANGE MASTER TO
+            MASTER_HOST='mysql-primary',
+            MASTER_PORT=3306,
+            MASTER_USER='root',
+            MASTER_PASSWORD='123456',
+            MASTER_LOG_FILE='mysql-bin.000001',
+            MASTER_LOG_POS=4;
+          START SLAVE;
+        \"
+        tail -f /dev/null
+      "
+
+networks:
+  mysql-network:
+    driver: bridge
