@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: mysql2
-  host: "localhost"
+  host: "127.0.0.1"
   username: root
   password: 123456
   database: test_db
