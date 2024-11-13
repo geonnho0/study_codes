@@ -3,5 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/db-replica" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rspec-basic" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/study-rails" vcs="Git" />
   </component>
 </project>
