@@ -2,10 +2,7 @@ class V1::Users < Grape::API
   resource :users do
     desc "Returns list of users"
     get do
-      [
-        { id: 1, name: "User 1" },
-        { id: 2, name: "User 2" }
-      ]
+      User.all
     end
 
     desc "Returns a specific user"
@@ -14,7 +11,8 @@ class V1::Users < Grape::API
     end
     route_param :id do
       get do
-        { id: params[:id], name: "User #{params[:id]}" }
+        user = User.find(params[:id])
+        user
       end
     end
 
@@ -23,7 +21,8 @@ class V1::Users < Grape::API
       requires :name, type: String, desc: "User name"
     end
     post do
-      { id: 3, name: params[:name] }
+      user = User.create!(name: params[:name])
+      user.id
     end
   end
 end
