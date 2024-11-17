@@ -19,6 +19,10 @@ class Money
     Money.new(@amount + amount.amount)
   end
 
+  def minus(amount)
+    Money.new(@amount - amount.amount)
+  end
+
   def times(percent)
     Money.new(@amount * percent)
   end
