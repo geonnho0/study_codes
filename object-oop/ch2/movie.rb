@@ -1,5 +1,6 @@
 class Movie
   attr_reader :fee
+  attr_writer :discount_policy
 
   def initialize(title, running_time, fee, discount_policy)
     @title = title
