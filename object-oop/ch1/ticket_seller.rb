@@ -4,7 +4,6 @@ class TicketSeller
   end
 
   def sell_to(audience)
-    ticket = ticket_office.ticket
-    @ticket_office.plus_amount(audience.buy(ticket))
+    @ticket_office.sell_ticket_to(audience)
   end
 end

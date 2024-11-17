@@ -6,6 +6,12 @@ class TicketOffice
     @tickets = tickets
   end
 
+  def sell_ticket_to(audience)
+    plus_amount(audience.buy(ticket))
+  end
+
+  private
+
   def ticket
     @tickets.shift
   end
