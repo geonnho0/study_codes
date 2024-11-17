@@ -3,7 +3,7 @@ class TicketOffice
 
   def initialize(amount, *tickets)
     @amount = amount
-    @tickets << tickets
+    @tickets = tickets
   end
 
   def ticket
