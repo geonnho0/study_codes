@@ -4,14 +4,7 @@ class TicketSeller
   end
 
   def sell_to(audience)
-    if audience.bag.invitation?
-      ticket = ticket_office.ticket
-      audience.bag.ticket = ticket
-    else
-      ticket = ticket_office.ticket
-      audience.bag.minus_amount(ticket.fee)
-      @ticket_office.plus_amount(ticket.fee)
-      audience.bag.ticket = ticket
-    end
+    ticket = ticket_office.ticket
+    @ticket_office.plus_amount(audience.buy(ticket))
   end
 end
